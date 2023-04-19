@@ -1,0 +1,7 @@
+build
+dist
+*.spec
+*.db
+NetworkWatcher_*
+icon.png
+__pycache__
