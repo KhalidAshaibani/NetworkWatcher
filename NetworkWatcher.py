@@ -25,9 +25,9 @@ def fillTableData():
     cursor.execute("SELECT * FROM dailyStats ORDER BY date desc")
     rows = cursor.fetchall()
     table.delete(*table.get_children())
-    for row in rows:
+    for i, row in enumerate(rows):
         table.insert(parent='', index='end', iid=None, values=(
-            row[0], row[2], row[1], getDataAmount(row[4]), getDataAmount(row[3]), getDataAmount(row[5])))
+            i+1, row[2], row[1], getDataAmount(row[4]), getDataAmount(row[3]), getDataAmount(row[5])))
     root.after(5000, fillTableData)
 
 def main():
@@ -46,7 +46,7 @@ def main():
     table.column('Total', anchor=tk.CENTER, width=100)
 
     table.heading('#0', text='')
-    table.heading('id', text='id')
+    table.heading('id', text='')
     table.heading('Date', text='Date')
     table.heading('Network', text='Network')
     table.heading('Recieved', text='Recieved')
