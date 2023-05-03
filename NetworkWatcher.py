@@ -27,7 +27,7 @@ def fillTableData():
     table.delete(*table.get_children())
     for row in rows:
         table.insert(parent='', index='end', iid=None, values=(
-            row[0], row[1], row[2], getDataAmount(row[4]), getDataAmount(row[3]), getDataAmount(row[5])))
+            row[0], row[2], row[1], getDataAmount(row[4]), getDataAmount(row[3]), getDataAmount(row[5])))
     root.after(5000, fillTableData)
 
 def main():
