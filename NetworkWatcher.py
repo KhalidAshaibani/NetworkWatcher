@@ -22,7 +22,7 @@ def getDataAmount(data):
     return "{:.2f}".format(data) + size
 
 def fillTableData():
-    cursor.execute("SELECT * FROM dailyStats")
+    cursor.execute("SELECT * FROM dailyStats ORDER BY date desc")
     rows = cursor.fetchall()
     table.delete(*table.get_children())
     for row in rows:
