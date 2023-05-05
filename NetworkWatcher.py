@@ -1,60 +1,45 @@
+# View the stats from the database
+
 #!/usr/bin/env python3
 import tkinter as tk
-from tkinter import ttk
 from tkinter import *
-from DBConnection import conn
-
-root = tk.Tk(className='Network Watcher')
-table = ttk.Treeview(root)
-cursor = conn.cursor()
-
-def getDataAmount(data):
-    size = 'Bytes'
-    if (data > 1023):
-        data = data / 1024
-        size = 'KB'
-        if (data > 1023):
-            data = data / 1024
-            size = 'MB'
-            if (data > 1023):
-                data = data / 1024
-                size = 'GB'
-    return "{:.2f}".format(data) + size
-
-def fillTableData():
-    cursor.execute("SELECT * FROM dailyStats ORDER BY date desc")
-    rows = cursor.fetchall()
-    table.delete(*table.get_children())
-    for i, row in enumerate(rows):
-        table.insert(parent='', index='end', iid=None, values=(
-            i+1, row[2], row[1], getDataAmount(row[4]), getDataAmount(row[3]), getDataAmount(row[5])))
-    root.after(5000, fillTableData)
+from Table import Table
+from Stat import Stat
 
 def main():
+    #  create the window frame
+    root = tk.Tk(className='Network Watcher')
+    # create the daily stats table
+    dailyTable = Table({
+                "id": {'stretch':tk.YES,'anchor':tk.CENTER,'width':20},
+                "Date": {'anchor':tk.CENTER,'width':100},
+                "Network": {'anchor':tk.CENTER,'width':100},
+                "Recieved": {'anchor':tk.CENTER,'width':100},
+                "Sent": {'anchor':tk.CENTER,'width':100},
+                "Total": {'anchor':tk.CENTER,'width':100},
+            },
+            {
+                'id':'',
+                'Date':'Date',
+                'Network':'Network',
+                'Recieved':'Recieved',
+                'Sent':'Sent',
+                'Total':'Total'
+            },
+            root
+            ).table
+    
+    # create Stat object to deal with data
+    stat = Stat(root, dailyTable)
+    # set the app icon and title
     img  = PhotoImage(file='/lib/NetworkWatcher/icon.png')
     root.title('Network Watcher v1.0')
     root.wm_iconphoto(True, img)
 
-    table['columns'] = ('id', 'Date', 'Network', 'Recieved', 'Sent', 'Total')
-
-    table.column('#0', stretch=tk.NO, width=0)
-    table.column('id', stretch=tk.YES, anchor=tk.CENTER, width=20)
-    table.column('Date', anchor=tk.CENTER, width=100)
-    table.column('Network', anchor=tk.CENTER, width=100)
-    table.column('Recieved', anchor=tk.CENTER, width=100)
-    table.column('Sent', anchor=tk.CENTER, width=100)
-    table.column('Total', anchor=tk.CENTER, width=100)
-
-    table.heading('#0', text='')
-    table.heading('id', text='')
-    table.heading('Date', text='Date')
-    table.heading('Network', text='Network')
-    table.heading('Recieved', text='Recieved')
-    table.heading('Sent', text='Sent')
-    table.heading('Total', text='Total')
-
-    fillTableData()
-    table.pack(expand=True, fill='both')
+    # fill data into the table
+    stat.fillDailyTable()
+    dailyTable.pack(expand=True, fill='both')
+    # start the window
     root.mainloop()
 
 main()

@@ -1,3 +1,5 @@
+# Monitor the system traffic and records it into the database
+
 #!/usr/bin/env python3
 import time
 import os
@@ -6,6 +8,7 @@ from datetime import datetime
 import psutil
 from DBConnection import conn
 
+# Create the table in the database
 def createTable(conn):
     cursor = conn.cursor()
     cursor.execute('''CREATE TABLE IF NOT EXISTS dailyStats (
@@ -18,12 +21,12 @@ def createTable(conn):
                         )''')
     conn.commit()
 
-
+# returns the connected network ssid (Network Name)
 def getNetworkName():
     ssid = os.popen("iwgetid -r").read().strip()
     return ssid
 
-
+# returns network stats counters
 def getNetworkUsage(interface):
     counters = psutil.net_io_counters(pernic=True)
     if interface in counters:
@@ -39,14 +42,18 @@ def getNetworkUsage(interface):
         'total': 0,
     }
 
-
+# updates the database records for a specified network for today
+# if the network doesn't exist in the database or doesn't have stats for today yet 
+# create a new record
 def updateNetworkUsage(conn, ssid, sent, recieved, usage):
     today = datetime.now().date()
     cursor = conn.cursor()
+    # retrive today record for the specified network
     cursor.execute(
         "SELECT * FROM dailyStats WHERE ssid=? AND date=?", (ssid, today))
     row = cursor.fetchone()
 
+    # check if record exists and update it if it does or create new record if it doesn't
     if row:
         newSent = row[3] + sent
         newRecieved = row[4] + recieved
@@ -67,16 +74,22 @@ def main():
         'total': 0,
     }
     createTable(conn)
+    # print info into terminal
     print("Network Watcher v0.1\nMonitoring Your Network...\nPress CTRL+Z to exit")
 
+    # start monitoring loop
     while True:
         currentNetwork = getNetworkName()
+        # if network exists an has an ssid
         if(len(currentNetwork)):
             interface = "wlp2s0"
 
+            # if current connected network is not the same network monitored in the previous iteration
+            # update the current network and get it's current usage
             if currentNetwork != prevNetwork:
                 prevNetwork = currentNetwork
                 prevUsage = getNetworkUsage(interface)
+            # else get the usage of the current network in one second and update the database
             else:
                 currentUsage = getNetworkUsage(interface)
 

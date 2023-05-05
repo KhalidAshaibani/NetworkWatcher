@@ -1,3 +1,5 @@
+# Connects the database
+
 import sqlite3
 
 DB_NAME = "/lib/NetworkWatcher/NetworkWatcher.db"
