@@ -6,12 +6,12 @@ Network Watcher makes it easy to monitor your networks usage, it provide a detai
 
 #### Download the .deb file
 
-[NetworkWatcher_1.0-2_all.deb](https://github.com/khalidalshaibani/NetworkWatcher/releases/download/v1.0/NetworkWatcher_1.0-2_all.deb)
+[NetworkWatcher_1.1.3_all.deb](https://github.com/khalidalshaibani/NetworkWatcher/releases/download/v1.1/NetworkWatcher_1.1-3_all.deb)
 
 #### Install the file you just downloaded
 
 ```sh
-sudo apt install ./NetworkWatcher_1.0-2_all.deb
+sudo apt install ./NetworkWatcher_1.1-3_all.deb
 ```
 
 #### Start Monitoring
