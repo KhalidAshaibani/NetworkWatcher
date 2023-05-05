@@ -1,6 +1,6 @@
+#!/usr/bin/env python3
 # View the stats from the database
 
-#!/usr/bin/env python3
 import tkinter as tk
 from tkinter import *
 from Table import Table

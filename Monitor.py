@@ -1,6 +1,6 @@
+#!/usr/bin/env python3
 # Monitor the system traffic and records it into the database
 
-#!/usr/bin/env python3
 import time
 import os
 import sqlite3
