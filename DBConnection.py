@@ -1,6 +1,6 @@
 # Connects the database
 
 import sqlite3
+from Consts import DB_NAME
 
-DB_NAME = "/lib/NetworkWatcher/NetworkWatcher.db"
 conn = sqlite3.connect(DB_NAME)
